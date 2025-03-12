@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>认证入口</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .warning {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff0000;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+            animation: blink 1s infinite;
+        }
+
+        .auth-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 30px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+            50% { transform: translate(-50%, -50%) translateY(-20px); }
+        }
+
+        input {
+            display: block;
+            margin: 15px 0;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #fff;
+            color: #fff;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            border: none;
+            color: #fff;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning">⚠ 25岁以下禁止入内 ⚠</div>
+    
+    <div class="auth-box">
+        <input type="text" id="code" placeholder="输入暗号222" maxlength="6">
+        <button onclick="checkCode()">进入秘密世界</button>
+    </div>
+
+    <script>
+        const secretCode = "222"; // 修改这里设置暗号
+        
+        function checkCode() {
+            const input = document.getElementById('code').value;
+            if(input === secretCode) {
+                window.location.href = "https://baidu.com"; // 修改为真实跳转地址
+            } else {
+                alert("暗号错误！禁止进入！");
+                document.getElementById('code').value = "";
+            }
+        }
+    </script>
+</body>
+</html>
