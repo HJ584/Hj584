@@ -5,101 +5,538 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>认证入口</title>
     <style>
+        /* 设置全局样式，使页面自适应屏幕大小 */
         body {
-            margin: 0;
-            height: 100vh;
-            overflow: hidden;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0; /* 移除默认外边距 */
+            height: 100vh; /* 设置高度为视口高度 */
+            overflow: hidden; /* 隐藏溢出内容 */
+            background: linear-gradient(45deg, #ff7e5f, #feb47b); /* 设置背景渐变色 */
+            background-size: 400% 400%; /* 设置背景大小 */
+            animation: gradientBG 15s ease infinite; /* 添加背景动画 */
+            font-family: 'Microsoft YaHei', sans-serif; /* 设置字体 */
+            position: relative; /* 为定位子元素做准备 */
         }
 
+        /* 定义背景动画关键帧 */
         @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% { background-position: 0% 50%; } /* 初始位置 */
+            50% { background-position: 100% 50%; } /* 中间位置 */
+            100% { background-position: 0% 50%; } /* 最终位置 */
         }
 
+        /* 设置警告信息样式 */
         .warning {
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ff0000;
-            font-size: 2.5em;
-            text-shadow: 0 0 10px rgba(255,0,0,0.5);
-            animation: blink 1s infinite;
+            position: absolute; /* 绝对定位 */
+            top: 10%; /* 距离顶部10% */
+            left: 50%; /* 距离左侧50% */
+            transform: translateX(-50%); /* 水平居中 */
+            color: #ff0000; /* 设置文字颜色为红色 */
+            font-size: 2.5em; /* 设置字体大小 */
+            text-shadow: 0 0 10px rgba(255,0,0,0.5); /* 添加文字阴影 */
+            animation: blink 1s infinite; /* 添加闪烁动画 */
         }
 
+        /* 设置认证框样式 */
         .auth-box {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 30px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.3);
-            animation: float 3s ease-in-out infinite;
+            position: absolute; /* 绝对定位 */
+            top: 50%; /* 距离顶部50% */
+            left: 50%; /* 距离左侧50% */
+            transform: translate(-50%, -50%); /* 精确居中 */
+            padding: 30px; /* 内边距 */
+            background: rgba(0,0,0,0.35); /* 设置背景透明度为35% */
+            border-radius: 15px; /* 圆角边框 */
+            box-shadow: 0 0 20px rgba(255,255,255,0.3); /* 添加阴影 */
+            width: 90%; /* 设置宽度为屏幕宽度的90% */
+            max-width: 400px; /* 设置最大宽度 */
         }
 
-        @keyframes blink {
-            50% { opacity: 0.5; }
+        /* 设置错误信息样式 */
+        .error-message {
+            color: red; /* 设置文字颜色为红色 */
+            text-align: center; /* 文字居中 */
+            margin: 10px 0 0; /* 设置外边距 */
+            display: none; /* 默认隐藏 */
         }
 
-        @keyframes float {
-            0%, 100% { transform: translate(-50%, -50%) translateY(0); }
-            50% { transform: translate(-50%, -50%) translateY(-20px); }
-        }
-
+        /* 设置输入框样式 */
         input {
-            display: block;
-            margin: 15px 0;
-            padding: 12px 20px;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid #fff;
-            color: #fff;
-            font-size: 1.2em;
+            display: block; /* 块级元素 */
+            margin: 15px 0; /* 设置外边距 */
+            padding: 12px 20px; /* 内边距 */
+            background: rgba(255,255,255,0.2); /* 设置背景透明度 */
+            border: 2px solid #ffffff; /* 设置边框 */
+            color: #ffffff; /* 设置文字颜色 */
+            font-size: 1.2em; /* 设置字体大小 */
+            text-align: center; /* 文字居中 */
+            border-radius: 5px; /* 圆角边框 */
+            width: 100%; /* 设置宽度为100% */
+            box-sizing: border-box; /* 包括边框和内边距在内 */
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        /* 输入框悬停效果 */
+        input:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: #ffffff;
+        }
+
+        /* 输入框聚焦效果 */
+        input:focus {
+            background: rgba(255,255,255,0.4);
+            border-color: #ff0000;
+            outline: none; /* 移除默认轮廓 */
+        }
+
+        /* 设置按钮样式 */
+        button {
+            width: 100%; /* 设置宽度为100% */
+            padding: 12px; /* 内边距 */
+            background: linear-gradient(45deg, #ff00ff, #00ffff); /* 设置背景渐变色 */
+            border: none; /* 移除边框 */
+            color: #fff; /* 设置文字颜色 */
+            font-size: 1.1em; /* 设置字体大小 */
+            cursor: pointer; /* 鼠标悬停时显示手型 */
+            border-radius: 5px; /* 圆角边框 */
+            transition: 0.3s; /* 添加过渡效果 */
+            margin: 10px 0; /* 设置外边距 */
+        }
+
+        /* 设置按钮悬停时的样式 */
+        button:hover {
+            opacity: 0.8; /* 改变不透明度 */
+            transform: scale(1.05); /* 放大按钮 */
+        }
+
+        /* 设置按钮点击时的样式 */
+        button:active {
+            transform: scale(0.95); /* 缩小按钮 */
+        }
+
+        /* 定义闪烁动画关键帧 */
+        @keyframes blink {
+            50% { opacity: 0.5; } /* 50%时透明度为0.5 */
+        }
+
+        /* 隐藏的管理员入口 */
+        .admin-login {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255,255,255,0.2);
+            font-size: 12px;
+            cursor: default;
+            user-select: none;
+        }
+
+        /* 管理员面板 */
+        .admin-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 面板内容 */
+        .panel-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* 面板标题 */
+        .panel-title {
+            font-size: 24px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
-            border: none;
-            color: #fff;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: 0.3s;
+        /* 面板分区 */
+        .panel-section {
+            margin-bottom: 20px;
         }
 
-        button:hover {
-            opacity: 0.8;
+        /* 面板标签 */
+        .panel-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* 颜色选择器 */
+        .color-picker {
+            width: 100%;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        /* 透明度滑块 */
+        .transparency-slider {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /* 透明度预览框 */
+        .transparency-preview {
+            height: 50px;
+            background: rgba(0,0,0,0.35);
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        /* 网址输入框 */
+        .url-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* 暗号输入框 */
+        .new-code-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* 警告信息输入框 */
+        .warning-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* 保存按钮 */
+        .save-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* 退出按钮 */
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #f44336, #e57373);
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        /* 文件上传控件 */
+        .file-upload {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* 文件上传按钮 */
+        .upload-btn {
+            margin-left: 10px;
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="warning">⚠ 25岁以下禁止入内 ⚠</div>
+    <!-- 警告信息 -->
+    <div class="warning" id="warningText">⚠ 25岁以下禁止入内 ⚠</div>
     
+    <!-- 认证框 -->
     <div class="auth-box">
+        <!-- 输入框 -->
         <input type="text" id="code" placeholder="输入暗号222" maxlength="6">
+        <!-- 错误信息显示区域 -->
+        <div class="error-message" id="errorMessage">暗号错误，请重新输入！</div>
+        <!-- 提交按钮 -->
         <button onclick="checkCode()">进入秘密世界</button>
     </div>
 
+    <!-- 隐藏的管理员入口 -->
+    <div class="admin-login" id="adminLoginTrigger">
+        版权所有 © 2023
+    </div>
+
+    <!-- 管理员面板 -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="panel-content">
+            <h2 class="panel-title">管理员控制面板</h2>
+            
+            <div class="panel-section">
+                <label class="panel-label">更换背景图</label>
+                <div class="file-upload">
+                    <input type="file" id="bgImageUpload" accept="image/*" style="display: none;">
+                    <button class="upload-btn" onclick="document.getElementById('bgImageUpload').click()">选择文件</button>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <label class="panel-label">更换跳转网址</label>
+                <input type="text" class="url-input" id="redirectUrl" placeholder="输入新的跳转网址">
+            </div>
+            
+            <div class="panel-section">
+                <label class="panel-label">设置验证码背景透明度</label>
+                <input type="range" class="transparency-slider" id="transparencySlider" min="0" max="1" step="0.01" value="0.35" onchange="previewTransparency(this.value)">
+                <div class="transparency-preview"></div>
+            </div>
+            
+            <div class="panel-section">
+                <label class="panel-label">更改暗号</label>
+                <input type="text" class="new-code-input" id="newCode" placeholder="输入新的暗号">
+            </div>
+            
+            <div class="panel-section">
+                <label class="panel-label">修改警告信息</label>
+                <input type="text" class="warning-input" id="newWarning" placeholder="输入新的警告信息">
+            </div>
+            
+            <div class="panel-section">
+                <button class="save-btn" onclick="saveAllSettings()">确认保存所有设置</button>
+            </div>
+            
+            <div class="panel-section">
+                <button class="logout-btn" onclick="logout()">退出管理面板</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const secretCode = "222"; // 修改这里设置暗号
-        
+        // 设置暗号
+        let secretCode = "222"; 
+        // 错误次数计数
+        let errorCount = 0; 
+        // 最大允许错误次数
+        const maxError = 3; 
+        // 管理员登录点击计数
+        let adminClickCount = 0;
+        // 管理员登录密码
+        const adminPassword = "admin123";
+
+        // 页面加载时自动聚焦输入框
+        document.getElementById('code').focus();
+
+        // 验证暗号函数
         function checkCode() {
+            // 获取输入的值
             const input = document.getElementById('code').value;
+            // 获取错误信息元素
+            const errorMessage = document.getElementById('errorMessage');
+
+            // 如果输入正确
             if(input === secretCode) {
-                window.location.href = "https://baidu.com"; // 修改为真实跳转地址
+                // 显示加载提示
+                const loadingText = document.createElement('div');
+                loadingText.style.position = 'absolute';
+                loadingText.style.top = '60%';
+                loadingText.style.left = '50%';
+                loadingText.style.transform = 'translateX(-50%)';
+                loadingText.style.color = 'white';
+                loadingText.style.fontSize = '1.2em';
+                loadingText.textContent = '正在进入秘密世界...';
+                document.body.appendChild(loadingText);
+
+                // 模拟加载过程，1.5秒后跳转
+                setTimeout(() => {
+                    // 获取保存的跳转网址
+                    const redirectUrl = localStorage.getItem('redirectUrl') || "https://example.com";
+                    window.location.href = redirectUrl; 
+                }, 1500);
             } else {
-                alert("暗号错误！禁止进入！");
-                document.getElementById('code').value = "";
+                // 错误次数加1
+                errorCount++;
+                if(errorCount >= maxError) {
+                    // 如果错误次数达到最大值，显示警告并锁定输入
+                    alert("您已多次输入错误，稍后再试！");
+                    document.getElementById('code').disabled = true;
+                    // 倒计时解锁
+                    let lockTime = 5; 
+                    const countdown = setInterval(() => {
+                        lockTime--;
+                        if(lockTime <= 0) {
+                            clearInterval(countdown);
+                            document.getElementById('code').disabled = false;
+                            document.getElementById('code').value = "";
+                            document.getElementById('code').focus();
+                            errorCount = 0;
+                        }
+                    }, 1000);
+                } else {
+                    // 显示错误信息
+                    errorMessage.style.display = 'block';
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 2000);
+                    document.getElementById('code').value = "";
+                    document.getElementById('code').focus();
+                }
             }
         }
+
+        // 管理员登录点击事件
+        document.getElementById('adminLoginTrigger').addEventListener('click', function() {
+            adminClickCount++;
+            // 设置需要点击多次才能显示登录界面
+            const requiredClicks = 7;
+            
+            if(adminClickCount >= requiredClicks) {
+                // 显示密码输入框
+                const passwordInput = document.createElement('input');
+                passwordInput.type = 'password';
+                passwordInput.placeholder = '请输入管理员密码';
+                passwordInput.style.position = 'absolute';
+                passwordInput.style.bottom = '80px';
+                passwordInput.style.right = '20px';
+                passwordInput.style.padding = '10px';
+                passwordInput.style.background = 'rgba(255,255,255,0.2)';
+                passwordInput.style.border = '1px solid white';
+                passwordInput.style.color = 'white';
+                passwordInput.style.borderRadius = '5px';
+                
+                const loginBtn = document.createElement('button');
+                loginBtn.textContent = '登录';
+                loginBtn.style.position = 'absolute';
+                loginBtn.style.bottom = '40px';
+                loginBtn.style.right = '20px';
+                loginBtn.style.padding = '10px 20px';
+                loginBtn.style.background = 'linear-gradient(45deg, #4CAF50, #8BC34A)';
+                loginBtn.style.border = 'none';
+                loginBtn.style.color = 'white';
+                loginBtn.style.borderRadius = '5px';
+                loginBtn.style.cursor = 'pointer';
+                
+                loginBtn.onclick = function() {
+                    if(passwordInput.value === adminPassword) {
+                        alert('登录成功！');
+                        document.getElementById('adminPanel').style.display = 'flex';
+                        passwordInput.remove();
+                        loginBtn.remove();
+                        document.getElementById('adminLoginTrigger').style.display = 'none';
+                    } else {
+                        alert('密码错误！');
+                        passwordInput.value = '';
+                    }
+                };
+                
+                document.body.appendChild(passwordInput);
+                document.body.appendChild(loginBtn);
+                passwordInput.focus();
+                
+                // 重置点击计数
+                adminClickCount = 0;
+            }
+        });
+
+        // 保存所有设置
+        function saveAllSettings() {
+            // 保存背景图片
+            const bgImageUpload = document.getElementById('bgImageUpload');
+            if(bgImageUpload.files && bgImageUpload.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.body.style.background = `url(${e.target.result})`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    // 保存背景图片到本地存储
+                    localStorage.setItem('backgroundImage', e.target.result);
+                };
+                reader.readAsDataURL(bgImageUpload.files[0]);
+            }
+            
+            // 保存跳转网址
+            const url = document.getElementById('redirectUrl').value;
+            if(url) {
+                localStorage.setItem('redirectUrl', url);
+            }
+            
+            // 保存验证码背景透明度设置
+            const transparencyValue = document.getElementById('transparencySlider').value;
+            document.querySelector('.auth-box').style.background = `rgba(0,0,0,${transparencyValue})`;
+            localStorage.setItem('authBoxTransparency', transparencyValue);
+            
+            // 保存新暗号
+            const newCode = document.getElementById('newCode').value;
+            if(newCode) {
+                secretCode = newCode;
+                localStorage.setItem('secretCode', newCode);
+            }
+            
+            // 保存警告信息
+            const newWarning = document.getElementById('newWarning').value;
+            if(newWarning) {
+                document.getElementById('warningText').textContent = newWarning;
+                localStorage.setItem('warningText', newWarning);
+            }
+            
+            alert('所有设置已保存！');
+        }
+
+        // 预览验证码背景透明度
+        function previewTransparency(value) {
+            document.querySelector('.transparency-preview').style.background = `rgba(0,0,0,${value})`;
+        }
+
+        // 退出管理面板
+        function logout() {
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('adminLoginTrigger').style.display = 'block';
+        }
+
+        // 页面加载时恢复之前设置的值
+        window.onload = function() {
+            // 恢复背景图片
+            const savedBgImage = localStorage.getItem('backgroundImage');
+            if(savedBgImage) {
+                document.body.style.background = `url(${savedBgImage})`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+            }
+            
+            // 恢复验证码背景透明度
+            const savedTransparency = localStorage.getItem('authBoxTransparency');
+            if(savedTransparency) {
+                document.querySelector('.auth-box').style.background = `rgba(0,0,0,${savedTransparency})`;
+                document.getElementById('transparencySlider').value = savedTransparency;
+                previewTransparency(savedTransparency);
+            }
+            
+            // 恢复暗号
+            const savedSecretCode = localStorage.getItem('secretCode');
+            if(savedSecretCode) {
+                secretCode = savedSecretCode;
+            }
+            
+            // 恢复警告信息
+            const savedWarningText = localStorage.getItem('warningText');
+            if(savedWarningText) {
+                document.getElementById('warningText').textContent = savedWarningText;
+            }
+        };
     </script>
 </body>
 </html>
